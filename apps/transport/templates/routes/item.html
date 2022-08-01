@@ -1,8 +1,8 @@
 {% extends "_blank.html" %}
 
 {% block qux_content %}
-<div class="container">
-  <div class="my-5 bg-light p-4">
+<div class="container-fluid">
+  <div class="my-3">
     <div class="row">
       <div class="col-12 col-md-4">Route</div>
       <div class="col-12 col-md-8">{{ object.route }}</div>
@@ -20,12 +20,22 @@
       <div class="col-12 col-md-8">{{ object.teacher }}</div>
     </div>
     <div class="row">
+      <div class="col-12 col-md-4">Driver</div>
+      <div class="col-12 col-md-8">{{ object.driver }}</div>
+    </div>
+    <div class="row">
       <div class="col-12 col-md-4">Attendant</div>
       <div class="col-12 col-md-8">{{ object.attendant }}</div>
     </div>
+    <div class="row border-top my-4 no-gutters pt-4">
+      <div class="col-12 col-md-4">WhatsApp</div>
+      <div class="col-12 col-md-8">
+        <a href="{{ object.whatsapp }}">{{ object.whatsapp }}</a>
+      </div>
+    </div>
   </div>
 
-  <div class="my-5 bg-light p-4">
+  <div class="my-3">
   {% include "riders/table.html" with object_list=riders route_info=False %}
   </div>
 </div>

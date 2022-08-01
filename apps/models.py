@@ -20,6 +20,14 @@ roman2integer = {
 }
 
 
+PERSON_CATEGORIES = (
+    ("student", "Student"),
+    ("faculty", "Faculty"),
+    ("staff", "Staff"),
+    ("other", "Other"),
+)
+
+
 class Person(CoreModel):
     phone_re = RegexValidator(
         regex=r"^\+?[1-9]\d{4,14}$",
@@ -29,8 +37,11 @@ class Person(CoreModel):
 
     last_name = models.CharField(max_length=32)
     first_name = models.CharField(max_length=32, **default_null_blank)
-    middle_name = models.CharField(max_length=64)
-    grade = models.CharField(max_length=4, **default_null_blank)
+    middle_name = models.CharField(max_length=64, **default_null_blank)
+    category = models.CharField(
+        max_length=8, choices=PERSON_CATEGORIES, default="student"
+    )
+    grade = models.IntegerField(**default_null_blank)
     phone = models.CharField(max_length=16, validators=[phone_re], **default_null_blank)
     email = models.EmailField(**default_null_blank)
     address = models.TextField(**default_null_blank)
@@ -59,7 +70,6 @@ class Person(CoreModel):
         params = {
             "first_name": n[0],
             "phone": record["phone"],
-            "address": record["address"],
             "grade": roman2integer.get(record.get("grade", None), None),
         }
         if len(n) > 1:
@@ -69,20 +79,30 @@ class Person(CoreModel):
 
         try:
             obj, created = cls.objects.get_or_create(**params)
+            obj.address = record["address"]
+            obj.save()
         except:
             obj = None
 
         return obj
 
     def name(self):
-        result = self.first_name
+        result = ""
+        if self.first_name:
+            result = self.first_name
         if self.last_name:
-            result += " " + self.last_name
+            if result:
+                result += " " + self.last_name
+            else:
+                result = self.last_name
 
         return result
+
+    def catgrade(self):
+        return self.grade if self.grade else self.category.upper()[0]
 
     def __repr__(self):
         return f"<{self.name()} :: {self.phone}>"
 
     def __str__(self):
-        return self.__repr__()
+        return self.name()

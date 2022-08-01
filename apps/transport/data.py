@@ -1,12 +1,14 @@
 import datetime
 import os
+import re
 
 import openpyxl
 import pandas as pd
+from django.db import IntegrityError
 
 from apps.models import Person
-from qux.utils.phone import phone_number
 from apps.transport.models import BusRider, BusRoute
+from qux.utils.phone import phone_number
 
 
 def import_excel():
@@ -42,7 +44,7 @@ def import_excel():
 
 
 def import_better():
-    filepath = "/Users/vishal/Downloads/transportrouteslist/"
+    filepath = "/Users/vishal/Downloads/revisedtransportrouteslist/"
     files = os.listdir(filepath)
     routes = {}
     records = []
@@ -50,6 +52,12 @@ def import_better():
         f = os.path.join(filepath, filename)
         wb = openpyxl.load_workbook(f)
         ws = wb.active
+
+        match = re.search(r"Route (\d+\w) .*", filename)
+        if match:
+            route_number = match[1]
+        else:
+            continue
 
         route_name = ws.cell(1, 1).value
         route_details = ws.cell(2, 1).value
@@ -60,6 +68,7 @@ def import_better():
             "route": route_details,
             "bus_parent": bus_parent,
             "attendant": attendant,
+            "object": BusRoute.objects.get(route=route_number),
         }
         routes[filenum] = route
 
@@ -78,8 +87,10 @@ def import_better():
             }
             records.append(record)
 
-    for route in routes:
-        routes[route]["object"] = BusRoute.create_record(routes[route])
+    # for route in routes:
+    #     routes[route]["object"] = BusRoute.create_record(routes[route])
+
+    robj = BusRoute.objects.get(id=28)
 
     for r in records:
         for x in ["rider", "address", "area"]:
@@ -91,11 +102,24 @@ def import_better():
         if person is None:
             continue
 
-        rider = BusRider()
-        rider.rider = person
-        rider.route = routes[r["route"]]["object"]
-        rider.area = r["area"]
-        rider.time = datetime.time(7)
-        rider.save()
+        route = routes[r["route"]]["object"]
+
+        pickup_time = str(r["time"]).replace(".", ":").split(":")
+        if all([x.isdigit() for x in pickup_time]):
+            pickup_time = [int(x) for x in pickup_time]
+        else:
+            continue
+
+        rparams = {
+            "rider_id": person.id,
+            "route_id": route.id,
+            "area": r["area"],
+            "time": datetime.time(*pickup_time),
+        }
+
+        try:
+            rider, created = BusRider.objects.get_or_create(**rparams)
+        except IntegrityError:
+            continue
 
     return routes, records

@@ -136,6 +136,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
     ("css", os.path.join(BASE_DIR, "qux/static/bootstrap/css")),
     ("js", os.path.join(BASE_DIR, "qux/static/bootstrap/js")),
+    ("vue", os.path.join(BASE_DIR, "common/vue/dist")),
 ]
 
 # Default primary key field type

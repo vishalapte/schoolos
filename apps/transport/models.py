@@ -38,7 +38,7 @@ class BusRoute(CoreModel):
         return f"<{self.id}: [{self.route}] {self.name}>"
 
     def __str__(self):
-        return f"{self.route}: {self.name}"
+        return f"{self.route}"
 
     @classmethod
     def create_record(cls, route):
@@ -51,15 +51,23 @@ class BusRoute(CoreModel):
 
         return obj
 
+    def as_dict(self):
+        result = self.to_dict()
+        result["id"] = self.id
+        result.pop("data")
+        print(result)
+        return result
+
 
 class BusRider(CoreModel):
     rider = models.ForeignKey(Person, on_delete=models.DO_NOTHING)
     route = models.ForeignKey(
         BusRoute, on_delete=models.DO_NOTHING, related_name="route_riders"
     )
-    area = models.CharField(max_length=64)
+    area = models.CharField(max_length=64, **default_null_blank)
     time = models.TimeField(**default_null_blank)
 
     class Meta:
         verbose_name = "Bus Rider"
         ordering = ["route", "rider"]
+        unique_together = [("route", "rider")]

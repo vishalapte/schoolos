@@ -17,10 +17,14 @@
 {% for obj in object_list %}
   <tr>
     <td>{{ obj.rider.last_name }}, {{ obj.rider.first_name }}</td>
-    <td>{{ obj.rider.grade }}</td>
+    <td><a href="{% url 'transport:riders_list' %}?grade={{ obj.rider.catgrade }}">
+      {{ obj.rider.catgrade }}
+    </a></td>
     <td>{{ obj.rider.phone }}</td>
     {% if route_info %}
-    <td>{{ obj.route }}</td>
+    <td><a href="{% url 'transport:routes_item' obj.route.id %}">
+      Route {{ obj.route }}
+    </a></td>
     <td>{{ obj.route.registration }}</td>
     {% endif %}
     <td>{{ obj.area }}</td>

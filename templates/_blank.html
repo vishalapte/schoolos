@@ -59,11 +59,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
     integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{# Vue #}
+<script>
+  window.base_url = '{{ base_url }}';
+</script>
+<script type="text/javascript" src="{% static 'vue/js/chunk-vendors.js' %}"></script>
+<script type="text/javascript" src="{% static 'vue/js/app.js' %}"></script>
 {% endblock %}
 
 {% block navbar %}
 {% include '_navbar.html' %}
 {% endblock %}
+
+{% block qux_content %}
+  {{ data|json_script:"data" }}
+
+  {% csrf_token %}
+  <div id="vueapp_container">
+
+  </div>
+{% endblock qux_content %}
 
 {% block messages %}
 <!-- flash messages -->
