@@ -9,7 +9,7 @@ class RouteListView(ListView):
 
 
 class RouteItemView(DetailView):
-    template_name = "routes/route_item.html"
+    template_name = "routes/item.html"
     queryset = BusRoute.objects.all()
 
     def get_context_data(self, **kwargs):
