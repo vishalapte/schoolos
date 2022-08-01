@@ -1,0 +1,25 @@
+<table class="table table-sm table-striped">
+<thead>
+  <tr>
+    <th>Route</th>
+    <th>Bus</th>
+    <th>Name</th>
+    <th>Teacher</th>
+    <th>Attendant</th>
+    <th>Driver</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for obj in object_list %}
+  <tr>
+    <td>{{ obj.route }}</td>
+    <td>{{ obj.registration }}</td>
+    <td>{{ obj.name }}</td>
+    <td>{{ obj.teacher }}</td>
+    <td>{{ obj.attendant }}</td>
+    <td>{{ obj.driver }}</td>
+  </tr>
+{% endfor %}
+</tbody>
+</table>

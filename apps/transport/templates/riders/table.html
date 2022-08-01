@@ -1,0 +1,31 @@
+<table class="table table-sm table-striped">
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Grade</th>
+    <th>Phone</th>
+    {% if route_info %}
+    <th>Route</th>
+    <th>Bus</th>
+    {% endif %}
+    <th>Area</th>
+    <th>Time</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for obj in object_list %}
+  <tr>
+    <td>{{ obj.rider.last_name }}, {{ obj.rider.first_name }}</td>
+    <td>{{ obj.rider.grade }}</td>
+    <td>{{ obj.rider.phone }}</td>
+    {% if route_info %}
+    <td>{{ obj.route }}</td>
+    <td>{{ obj.route.registration }}</td>
+    {% endif %}
+    <td>{{ obj.area }}</td>
+    <td>{{ obj.time }}</td>
+  </tr>
+{% endfor %}
+</tbody>
+</table>

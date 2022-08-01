@@ -1,0 +1,56 @@
+{% load static %}
+<nav id="nav" class="navbar navbar-expand-lg navbar-fixed-top navbar-light">
+  <div class="container-fluid p-0">
+    <a class="navbar-brandx" href="/">
+      <span class="font-weight-bold">AnalogStack</span>
+    </a>
+
+    <button type="button"
+            class="navbar-toggler"
+            data-toggle="collapse"
+            data-target="#navbar"
+            aria-expanded="false"
+            aria-controls="navbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-default navbar-nav ml-auto">
+        <!-- Services -->
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link px-md-3" data-toggle="dropdown" role="button">
+            <span class="foo">Transport</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-item">
+              <a href="#">Routes</a>
+            </div>
+            <div class="dropdown-item">
+              <a href="#">Riders</a>
+            </div>
+          </div>
+        </li>
+
+        <!-- About -->
+        <li class="nav-item">
+          <a href="#" class="nav-link px-md-3" data-toggle="dropdown" role="button">
+            <span class="foo">About Us</span>
+          </a>
+        </li>
+
+        <!-- Logout -->
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a href="/logout/" class="nav-link px-md-3">
+              Logout
+            </a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+          <a href="/login/" class="nav-link px-md-3">Login</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
